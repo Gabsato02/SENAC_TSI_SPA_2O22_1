@@ -1,13 +1,17 @@
 import React from 'react';
 import Post from './Post';
+import { PostContext } from '../App';
 
-const Feed = ({ posts }) => {
+const Feed = () => {
+  const { state } = React.useContext(PostContext);
   return (
-    <section className="feed">
-      {posts.map((post, index) => (
-        <Post {...post} key={index} />
-      ))}
-    </section>
+    <div className="container px-4 py-2">
+      <section className="row">
+        {state.posts.map((post, index) => (
+          <Post {...post} key={index} />
+        ))}
+      </section>
+    </div>
   );
 };
 

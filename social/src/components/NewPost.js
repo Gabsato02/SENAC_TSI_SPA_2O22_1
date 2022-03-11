@@ -1,11 +1,13 @@
 import React from 'react';
+import { PostContext } from '../App';
 
-const NewPost = ({ username, posts, setPosts }) => {
+const NewPost = ({ username }) => {
+  const { dispatch } = React.useContext(PostContext);
   const [imagePath, setImagePath] = React.useState('');
   const [postText, setPostText] = React.useState('');
 
   const handleNewPost = () => {
-    const payload = {
+    const newPost = {
       text: postText,
       image: imagePath,
       username,
@@ -13,21 +15,21 @@ const NewPost = ({ username, posts, setPosts }) => {
       date: new Date().toLocaleString(),
     };
 
-    setPosts([payload, ...posts]);
+    dispatch({ type: 'CREATE_POST', payload: newPost });
   };
 
   return (
-    <section className="new-post">
-      <h2 className="new-post__title">Crie um novo post</h2>
-      <div className="new-post__input-wrapper">
+    <section className="p-4">
+      <h2 className="display-4">Crie um novo post</h2>
+      <div className="d-flex flex-column py-4">
         <input
-          className="new-post__input--file"
+          className="form-control"
           name="file"
           type="file"
           onChange={(event) => setImagePath(event.target.files[0])}
         />
         <input
-          className="new-post__input--text"
+          className="form-control mt-4"
           name="file-text"
           type="text"
           placeholder="O que você está pensando?"
@@ -35,7 +37,10 @@ const NewPost = ({ username, posts, setPosts }) => {
           onChange={(event) => setPostText(event.target.value)}
         />
       </div>
-      <button className="new-post__button" onClick={handleNewPost}>
+      <button
+        className="btn btn-lg btn-success d-block ms-auto"
+        onClick={handleNewPost}
+      >
         Postar
       </button>
     </section>
