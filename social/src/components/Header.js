@@ -2,18 +2,12 @@ import React from 'react';
 
 const Header = ({ username, setUsername, isLoggedIn, setIsLoggedIn }) => {
   return (
-    <div className="header">
+    <div className="py-2">
       {!isLoggedIn ? (
-        <div className="header-logged-out">
-          <div className="header-logged-out__input-wrapper">
-            <label
-              className="header-logged-out__input-label"
-              htmlFor="username"
-            >
-              Usuário
-            </label>
+        <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center ms-auto">
             <input
-              className="header-logged-out__input"
+              className="form-control me-3"
               placeholder="Digite seu usuário..."
               name="username"
               type="text"
@@ -22,16 +16,21 @@ const Header = ({ username, setUsername, isLoggedIn, setIsLoggedIn }) => {
             />
           </div>
           <button
-            className="header-logged-out__button"
+            className="btn btn-primary"
             onClick={() => setIsLoggedIn(true)}
           >
             Logar
           </button>
         </div>
       ) : (
-        <div className="header-logged-in">
-          <h1 className="header-logged-in__title">Bem vindo, {username}!</h1>
-          <button className="header-logged-in__button">Deslogar</button>
+        <div className="d-flex justify-content-end align-items-center">
+          <h1 className="display-6 me-3">Bem vindo, {username}!</h1>
+          <button
+            className="btn btn-danger h-25"
+            onClick={() => setIsLoggedIn(false)}
+          >
+            Deslogar
+          </button>
         </div>
       )}
     </div>
