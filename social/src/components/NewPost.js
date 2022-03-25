@@ -1,5 +1,5 @@
 import React from 'react';
-import { PostContext } from '../App';
+import { PostContext } from '../_App';
 
 const NewPost = ({ username }) => {
   const { dispatch } = React.useContext(PostContext);

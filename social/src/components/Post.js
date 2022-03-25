@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserContext } from '../App';
+import { UserContext } from '../_App';
 
 const Post = ({ title, date, image, text, username }) => {
   const currentUser = React.useContext(UserContext);

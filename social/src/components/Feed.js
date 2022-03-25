@@ -1,6 +1,6 @@
 import React from 'react';
 import Post from './Post';
-import { PostContext } from '../App';
+import { PostContext } from '../_App';
 
 const Feed = () => {
   const { state } = React.useContext(PostContext);
