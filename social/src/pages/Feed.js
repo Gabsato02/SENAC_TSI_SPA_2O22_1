@@ -1,10 +1,14 @@
 import React from 'react';
+import { UserContext } from '../auth';
 import Post from '../components/feed/Post';
 import Layout from '../components/shared/Layout';
 import { getPost } from '../data';
 
 const Feed = () => {
   const posts = [getPost(), getPost(), getPost()];
+  const { currentUser } = React.useContext(UserContext);
+  console.log(currentUser);
+
   return (
     <Layout title="Feed">
       <div className="row">
