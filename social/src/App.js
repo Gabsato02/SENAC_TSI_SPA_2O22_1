@@ -5,6 +5,7 @@ import Explorer from './pages/Explorer';
 import Feed from './pages/Feed';
 import LoginPage from './pages/LoginPage';
 import NotFound from './pages/NotFound';
+import RegisterPage from './pages/RegisterPage';
 
 const App = () => {
   const { currentUser } = React.useContext(UserContext);
@@ -13,6 +14,7 @@ const App = () => {
     return (
       <BrowserRouter>
         <Routes>
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

@@ -1,26 +1,28 @@
 import React from 'react';
 import Layout from '../components/shared/Layout';
 import { UserContext } from '../auth';
-import { useLazyQuery } from '@apollo/client';
-import { GET_LOGIN } from '../graphql/login/query';
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../graphql/login/mutation';
 import { Link, useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
-  const [username, setUsername] = React.useState('gabsato');
-  const [password, setPassword] = React.useState('123456');
+const RegisterPage = () => {
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [name, setName] = React.useState('');
   // eslint-disable-next-line no-unused-vars
   const { setCurrentUser } = React.useContext(UserContext);
-  const [getLogin] = useLazyQuery(GET_LOGIN);
+  const [addLogin] = useMutation(ADD_USER);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const addUser = async () => {
     try {
-      const { data } = await getLogin({ variables: { username } });
-      const { user } = data;
-      const { id, name, username: $username, password: $password } = user[0];
-      if ($password !== btoa(password)) return;
-      setCurrentUser({ id, name, username: $username });
+      const { data } = await addLogin({
+        variables: { username, password: btoa(password), name },
+      });
+      const { id, $name, $username } = data?.insert_user?.returning[0] || null;
+      setCurrentUser({ id, name: $name, username: $username });
       navigate('/');
+      console.log(data);
     } catch (err) {
       console.error(err);
     }
@@ -51,23 +53,30 @@ const LoginPage = () => {
             <input
               type="text"
               className="form-control"
+              placeholder="Nome"
+              value={name}
+              onChange={({ target }) => setName(target.value)}
+            />
+            <input
+              type="text"
+              className="form-control my-2"
               placeholder="Usuário"
               value={username}
               onChange={({ target }) => setUsername(target.value)}
             />
             <input
               type="password"
-              className="form-control my-2"
+              className="form-control mb-2"
               placeholder="Senha"
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
-            <button className="btn btn-primary w-100" onClick={handleLogin}>
-              Logar
+            <button className="btn btn-primary w-100" onClick={addUser}>
+              Registrar
             </button>
             <hr className="my-5" />
             <div className="text-center">
-              <Link to="/register">Não possui conta? Cadastre-se!</Link>
+              <Link to="/login">Já possui uma conta? Faça o login</Link>
             </div>
           </div>
           <div>
@@ -93,4 +102,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
