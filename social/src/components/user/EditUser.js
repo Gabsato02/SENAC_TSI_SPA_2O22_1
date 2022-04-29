@@ -1,16 +1,18 @@
 import React from 'react';
 import { UserContext } from '../../auth';
-import { useMutation } from '@apollo/client';
-import { ADD_POST } from '../../graphql/post/mutation';
+import { useMutation, useQuery } from '@apollo/client';
+import { EDIT_USER } from '../../graphql/login/mutation';
+import { GET_POSTS } from '../../graphql/post/query';
 
-const NewPost = ({ showPostModal }) => {
-  const [text, setText] = React.useState('');
+const EditUser = ({ showEditModal }) => {
+  const [name, setName] = React.useState('');
   const image = React.useRef();
   const { currentUser } = React.useContext(UserContext);
-  const [addPost] = useMutation(ADD_POST);
+  const [editUser] = useMutation(EDIT_USER);
+  const { refetch } = useQuery(GET_POSTS);
 
-  if (showPostModal && !document.querySelector('.show')) {
-    new window.bootstrap.Modal(document.querySelector('#modal-post')).show();
+  if (showEditModal && !document.querySelector('.show')) {
+    new window.bootstrap.Modal(document.querySelector('#modal-user')).show();
   }
 
   const uploadImage = async (imageFile) => {
@@ -39,24 +41,26 @@ const NewPost = ({ showPostModal }) => {
     try {
       const imageUrl = await uploadImage(image.current.files[0]);
 
-      await addPost({
+      await editUser({
         variables: {
-          text,
+          name,
           image: imageUrl,
-          user_id: currentUser.id,
+          id: currentUser.id,
         },
       });
+
+      refetch();
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="modal" id="modal-post" tabIndex="-1" role="dialog">
+    <div className="modal" id="modal-user" tabIndex="-1" role="dialog">
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Criar postagem</h5>
+            <h5 className="modal-title">Editar Usuário</h5>
             <button
               type="button"
               className="close"
@@ -69,10 +73,10 @@ const NewPost = ({ showPostModal }) => {
           <div className="modal-body">
             <input
               type="text"
-              placeholder="Novo nome"
+              placeholder="O que está pensando?"
               className="form-control my-2"
-              value={text}
-              onChange={({ target }) => setText(target.value)}
+              value={name}
+              onChange={({ target }) => setName(target.value)}
             />
             <input type="file" className="form-control my-2" ref={image} />
           </div>
@@ -82,7 +86,7 @@ const NewPost = ({ showPostModal }) => {
               className="btn btn-primary"
               onClick={handleNewPost}
             >
-              Postar
+              Salvar
             </button>
             <button
               type="button"
@@ -98,4 +102,4 @@ const NewPost = ({ showPostModal }) => {
   );
 };
 
-export default NewPost;
+export default EditUser;

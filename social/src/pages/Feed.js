@@ -1,24 +1,30 @@
+import { useQuery } from '@apollo/client';
 import React from 'react';
 import { UserContext } from '../auth';
 import Post from '../components/feed/Post';
 import Layout from '../components/shared/Layout';
-import { getPost } from '../data';
+import { GET_POSTS } from '../graphql/post/query';
 
 const Feed = () => {
-  const posts = [getPost(), getPost(), getPost()];
+  const { loading, data, refetch } = useQuery(GET_POSTS);
   const { currentUser } = React.useContext(UserContext);
   console.log(currentUser);
 
   return (
-    <Layout title="Feed">
-      <div className="row">
-        <div className="col-10 mx-auto">
-          {posts.map((post) => (
-            <Post post={post} key={post.post_id} />
-          ))}
-        </div>
-      </div>
-    </Layout>
+    <>
+      {loading && <h1>Carregando...</h1>}
+      {!loading && (
+        <Layout title="Feed">
+          <div className="row">
+            <div className="col-12 col-lg-8 mx-auto">
+              {data.post.map((post, index) => (
+                <Post post={post} key={index} refetch={refetch} />
+              ))}
+            </div>
+          </div>
+        </Layout>
+      )}
+    </>
   );
 };
 

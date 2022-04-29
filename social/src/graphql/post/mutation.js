@@ -7,3 +7,11 @@ export const ADD_POST = gql`
     }
   }
 `;
+
+export const ADD_LIKE = gql`
+  mutation ADD_LIKE($id: uuid, $likes: Int) {
+    update_post(where: { id: { _eq: $id } }, _set: { likes: $likes }) {
+      affected_rows
+    }
+  }
+`;

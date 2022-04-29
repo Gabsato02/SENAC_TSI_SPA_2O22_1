@@ -2,10 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../auth';
 import NewPost from '../post/NewPost';
+import EditUser from '../user/EditUser';
 
 const Navbar = () => {
   const { currentUser } = React.useContext(UserContext);
-  const [showModal, setShowModal] = React.useState(false);
+  const [showPostModal, setShowPostModal] = React.useState(false);
+  const [showEditModal, setShowEditModal] = React.useState(false);
 
   return (
     <nav className="navbar fixed-top navbar-light bg-light">
@@ -25,14 +27,20 @@ const Navbar = () => {
             <li className="nav-item">
               <button
                 className="btn mx-2"
-                onClick={() => setShowModal(!showModal)}
+                onClick={() => setShowPostModal(!showPostModal)}
               >
                 Postar
               </button>
-              <NewPost showModal={showModal} />
+              <NewPost showPostModal={showPostModal} />
             </li>
             <li className="nav-item d-flex align-items-center">
-              {currentUser.name}
+              <button
+                className="btn mx-2"
+                onClick={() => setShowEditModal(!showEditModal)}
+              >
+                {currentUser.name}
+              </button>
+              <EditUser showEditModal={showEditModal} />
             </li>
           </ul>
         )}

@@ -1,7 +1,26 @@
+import { useMutation } from '@apollo/client';
 import React from 'react';
-import Comment from './Comment';
+import { ADD_LIKE } from '../../graphql/post/mutation';
+// import Comment from './Comment';
 
-const Post = ({ post }) => {
+const Post = ({ post, refetch }) => {
+  const [addLike] = useMutation(ADD_LIKE);
+
+  const handleLike = async () => {
+    try {
+      addLike({
+        variables: {
+          id: post.id,
+          likes: post.likes + 1,
+        },
+      });
+
+      refetch();
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
+
   return (
     <article
       className="border rounded-1 mx-auto my-3"
@@ -20,7 +39,13 @@ const Post = ({ post }) => {
       </div>
       <div className="text-start m-3">
         <div>
-          <i className="fa-regular fa-heart fs-4 me-2" />
+          <i
+            className={`${
+              post.likes ? 'fa-solid' : 'fa-regular'
+            } fa-heart fs-4 me-2`}
+            onClick={handleLike}
+            style={{ cursor: 'pointer' }}
+          />
           <i className="fa-regular fa-comment-dots fs-4" />
         </div>
         <div>
@@ -29,12 +54,12 @@ const Post = ({ post }) => {
           }`}</span>
           <span className="fw-bold me-1">{post.user.username}</span>
           <span>{post.text}</span>
-          <span className="d-block text-muted">
+          {/* <span className="d-block text-muted">
             Ver todos os {post.comments.length} comentários
           </span>
           {post.comments.map((comment, index) => (
             <Comment comment={comment} key={index} />
-          ))}
+          ))} */}
         </div>
       </div>
     </article>
