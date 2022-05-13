@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client';
 import { PlayArrow, QueueMusic } from '@mui/icons-material';
 import {
   Card,
@@ -5,25 +6,31 @@ import {
   CardContent,
   CardMedia,
   IconButton,
+  LinearProgress,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import { GET_SONGS } from '../graphql/query';
 
 const MusicList = () => {
-  const fakeMusic = {
-    title: 'Title',
-    artist: 'Artist',
-    image: 'https://m.media-amazon.com/images/I/91qLOt7RmmL._AC_SL1500_.jpg',
-  };
+  const { data, loading, error } = useQuery(GET_SONGS);
+
+  if (loading) {
+    return <LinearProgress sx={{ marginTop: '8px' }} color="success" />;
+  }
+
+  if (error) {
+    return <div>ERRO</div>;
+  }
 
   const Music = ({ music }) => {
-    const { image, title, artist } = music;
+    const { thumbnail, title, artist } = music;
 
     return (
       <Card sx={{ display: 'flex', alignItems: 'center', marginY: '10px' }}>
         <CardMedia
-          image={image}
+          image={thumbnail}
           sx={{ objectFit: 'cover', width: '140px', height: '140px' }}
         />
         <Box
@@ -56,8 +63,8 @@ const MusicList = () => {
 
   return (
     <Box>
-      {Array.from({ length: 15 }, () => fakeMusic).map((music, index) => {
-        return <Music key={index} music={music} />;
+      {data.songs.map((song) => {
+        return <Music key={song.id} music={song} />;
       })}
     </Box>
   );

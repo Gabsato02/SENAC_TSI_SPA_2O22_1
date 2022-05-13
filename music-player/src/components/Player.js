@@ -8,18 +8,25 @@ import {
   IconButton,
   Slider,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import React from 'react';
 import Queue from './Queue';
 
 const Player = () => {
+  const mobile = useMediaQuery('(min-width: 900px)');
+
   return (
     <Box>
       <Card
+        style={
+          mobile
+            ? { marginLeft: 10 }
+            : { marginLeft: 0, boxShadow: '-1px 2px 8px grey' }
+        }
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          marginLeft: '10px',
         }}
       >
         <Box
@@ -55,7 +62,7 @@ const Player = () => {
         </Box>
         <Slider color="success" type="range" min={0} max={1} step={0.01} />
       </Card>
-      <Queue />
+      {mobile && <Queue />}
     </Box>
   );
 };
