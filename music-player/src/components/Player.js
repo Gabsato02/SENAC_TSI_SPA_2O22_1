@@ -1,4 +1,4 @@
-import { PlayArrow, SkipNext, SkipPrevious } from '@mui/icons-material';
+import { Pause, PlayArrow, SkipNext, SkipPrevious } from '@mui/icons-material';
 import {
   Box,
   Card,
@@ -10,11 +10,17 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import React from 'react';
+import React, { useContext } from 'react';
+import { SongContext } from '../App';
 import Queue from './Queue';
 
-const Player = () => {
+const Player = ({ queue }) => {
   const mobile = useMediaQuery('(min-width: 900px)');
+  const { currentSong, songDispatch } = useContext(SongContext);
+
+  const handlePlayButton = () => {
+    songDispatch({ type: currentSong.isPlaying ? 'PAUSE_SONG' : 'PLAY_SONG' });
+  };
 
   return (
     <Box>
@@ -37,19 +43,45 @@ const Player = () => {
         >
           <CardContent>
             <Typography variant="h5" component="h2">
-              Título da Música
+              {currentSong?.song.title}
             </Typography>
             <Typography variant="subtitle1" component="h3">
-              Nome do Artista
+              {currentSong?.song.artist}
             </Typography>
             <Typography>03:20:04</Typography>
           </CardContent>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ mr: 2 }}>10:20:10</Typography>
+            <img
+              src={currentSong?.song.thumbnail}
+              alt="music"
+              width="80px"
+              height="80px"
+              style={{
+                objectFit: 'cover',
+                borderRadius: '4px',
+                marginRight: '12px',
+              }}
+            />
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <CardActions>
             <IconButton>
               <SkipPrevious />
             </IconButton>
-            <IconButton>
-              <PlayArrow />
+            <IconButton onClick={handlePlayButton}>
+              {currentSong?.isPlaying ? (
+                <Pause fontSize="large" />
+              ) : (
+                <PlayArrow fontSize="large" />
+              )}
             </IconButton>
             <IconButton>
               <SkipNext />
@@ -60,9 +92,11 @@ const Player = () => {
             sx={{ height: '140px', width: '140px' }}
           />
         </Box>
-        <Slider color="success" type="range" min={0} max={1} step={0.01} />
+        <Box sx={{ mx: 3 }}>
+          <Slider color="success" type="range" min={0} max={1} step={0.01} />
+        </Box>
       </Card>
-      {mobile && <Queue />}
+      {mobile && <Queue queue={queue} />}
     </Box>
   );
 };

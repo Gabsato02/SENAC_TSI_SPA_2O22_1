@@ -1,5 +1,6 @@
-import { useQuery } from '@apollo/client';
-import { PlayArrow, QueueMusic } from '@mui/icons-material';
+import React, { useContext } from 'react';
+import { useSubscription } from '@apollo/client';
+import { Pause, PlayArrow, QueueMusic } from '@mui/icons-material';
 import {
   Card,
   CardActions,
@@ -10,11 +11,23 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
-import { GET_SONGS } from '../graphql/query';
+import { GET_SONGS } from '../graphql/subscription';
+import { SongContext } from '../App';
 
-const MusicList = () => {
-  const { data, loading, error } = useQuery(GET_SONGS);
+const MusicList = ({ queue }) => {
+  const { data, loading, error } = useSubscription(GET_SONGS);
+  const { currentSong, songDispatch } = useContext(SongContext);
+
+  console.log(currentSong.isPlaying);
+
+  const handleChangeMusic = (music) => {
+    songDispatch({ type: 'CHANGE_SONG', payload: { music } });
+    songDispatch({ type: music.isPlaying ? 'PAUSE_SONG' : 'PLAY_SONG' });
+  };
+
+  const handleAddQueue = (music) => {
+    queue.queueDispatch({ type: 'ADD_QUEUE', payload: { music } });
+  };
 
   if (loading) {
     return <LinearProgress sx={{ marginTop: '8px' }} color="success" />;
@@ -49,10 +62,15 @@ const MusicList = () => {
             </Typography>
           </CardContent>
           <CardActions>
-            <IconButton>
-              <PlayArrow color="success" />
+            <IconButton onClick={() => handleChangeMusic(music)}>
+              {currentSong.isPlaying &&
+              currentSong.song.title === music.title ? (
+                <Pause color="success" />
+              ) : (
+                <PlayArrow color="success" />
+              )}
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => handleAddQueue(music)}>
               <QueueMusic color="success" />
             </IconButton>
           </CardActions>

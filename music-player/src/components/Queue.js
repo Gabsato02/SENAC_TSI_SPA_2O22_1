@@ -2,15 +2,13 @@ import { Delete } from '@mui/icons-material';
 import { Avatar, Box, IconButton, Typography } from '@mui/material';
 import React from 'react';
 
-const Queue = () => {
-  const fakeMusic = {
-    title: 'Title',
-    artist: 'Artist',
-    image: 'https://m.media-amazon.com/images/I/91qLOt7RmmL._AC_SL1500_.jpg',
+const Queue = ({ queue }) => {
+  const handleRemoveQueue = (music) => {
+    queue.queueDispatch({ type: 'REMOVE_QUEUE', payload: { music } });
   };
 
   const QueueMusic = ({ music }) => {
-    const { image, title, artist } = music;
+    const { title, artist, thumbnail } = music;
 
     return (
       <Box
@@ -24,7 +22,7 @@ const Queue = () => {
         }}
       >
         <Avatar
-          src={image}
+          src={thumbnail}
           alt="CD Cover"
           sx={{ width: '40px', height: '40px' }}
         />
@@ -32,7 +30,7 @@ const Queue = () => {
           <Typography variant="subtitle2">{title}</Typography>
           <Typography variant="body2">{artist}</Typography>
         </Box>
-        <IconButton>
+        <IconButton onClick={() => handleRemoveQueue(music)}>
           <Delete color="error" />
         </IconButton>
       </Box>
@@ -41,7 +39,10 @@ const Queue = () => {
 
   return (
     <Box>
-      {Array.from({ length: 5 }, () => fakeMusic).map((music, index) => {
+      <Typography variant="h5" component="h2">{`Fila (${
+        queue.length || 0
+      })`}</Typography>
+      {queue.currentQueue.map((music, index) => {
         return <QueueMusic key={index} music={music} />;
       })}
     </Box>
