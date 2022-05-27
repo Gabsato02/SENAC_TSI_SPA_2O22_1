@@ -13,7 +13,7 @@ export const SongContext = createContext({
     artist: 'Milky Chance',
     thumbnail: 'https://i.ytimg.com/vi/W9pEC-Bo2Cw/maxresdefault.jpg',
     url: 'https://www.youtube.com/watch?v=qlGQoxzdwP4',
-    duration: '3.5',
+    duration: 3.5,
   },
   isPlaying: false,
 });
@@ -36,7 +36,7 @@ function App() {
           <Grid
             style={
               mobile
-                ? { position: 'fixed', width: '100%', right: 10, top: 80 }
+                ? {}
                 : {
                     position: 'fixed',
                     width: '100%',

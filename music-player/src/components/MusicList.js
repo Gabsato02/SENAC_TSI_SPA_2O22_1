@@ -18,8 +18,6 @@ const MusicList = ({ queue }) => {
   const { data, loading, error } = useSubscription(GET_SONGS);
   const { currentSong, songDispatch } = useContext(SongContext);
 
-  console.log(currentSong.isPlaying);
-
   const handleChangeMusic = (music) => {
     songDispatch({ type: 'CHANGE_SONG', payload: { music } });
     songDispatch({ type: music.isPlaying ? 'PAUSE_SONG' : 'PLAY_SONG' });

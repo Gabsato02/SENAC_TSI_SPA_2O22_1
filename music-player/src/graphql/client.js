@@ -3,7 +3,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 
 export const client = new ApolloClient({
   link: new WebSocketLink({
-    uri: 'https://amusing-condor-63.hasura.app/v1/graphql',
+    uri: 'wss://amusing-condor-63.hasura.app/v1/graphql',
     options: {
       reconnect: true,
       connectionParams: {

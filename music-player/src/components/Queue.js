@@ -39,7 +39,7 @@ const Queue = ({ queue }) => {
 
   return (
     <Box>
-      <Typography variant="h5" component="h2">{`Fila (${
+      <Typography sx={{ ml: 2, mt: 4 }} variant="h5" component="h2">{`Fila (${
         queue.length || 0
       })`}</Typography>
       {queue.currentQueue.map((music, index) => {
